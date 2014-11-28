@@ -19,29 +19,32 @@ public class Cursor : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		shiftPosition ();
 		updateTarget ();
+
+		if (!Input.GetButton ("A_1")){
+			shiftPosition ();
+		}
 
 		if (target != null) {
 			acquireXY ();
 
 			// Adjust rotational values if necessary
 			if (target.Type == Shifter.ShiftType.Rotate) {
-					if (Input.GetButtonDown ("A_1")) {
-							target.startRotate (inputAxis.x, inputAxis.y);
-					}
+				if (Input.GetButtonDown ("A_1")) {
+					target.startRotate (inputAxis.x, inputAxis.y);
+				}
 			}
 
-			if (target != null && inputAxis.magnitude > 0 && Input.GetButton ("A_1")) {
-					target.manipulate (inputAxis.x, inputAxis.y);
+			if (Input.GetButton ("A_1") && target != null && inputAxis.magnitude > 0) {
+				target.manipulate (inputAxis.x, inputAxis.y);
 			}
 		}
 	}
 
 	void shiftPosition(){
 		Vector3 newPos = transform.position;
-		newPos.x += Input.GetAxis ("R_XAxis_1") * Time.deltaTime * 4;
-		newPos.z -= Input.GetAxis("R_YAxis_1") * Time.deltaTime * 4;
+		newPos.x += Input.GetAxis ("L_XAxis_1") * Time.deltaTime * 4;
+		newPos.z -= Input.GetAxis("L_YAxis_1") * Time.deltaTime * 4;
 
 		if (newPos != transform.position){
 			transform.position = newPos;
@@ -78,7 +81,7 @@ public class Cursor : MonoBehaviour {
 
 	public void AddSelf(Shifter newShifter){
 		shifters.Add (newShifter);
-		Component halo = gameObject.GetComponent("Halo"); halo.GetType().GetProperty("enabled").SetValue(halo, false, null);
+		//Component halo = gameObject.GetComponent("Halo"); halo.GetType().GetProperty("enabled").SetValue(halo, false, null);
 	}
 
 	public void RemoveSelf(Shifter removeShifter){

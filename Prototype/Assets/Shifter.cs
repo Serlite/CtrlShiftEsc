@@ -34,7 +34,7 @@ public class Shifter : MonoBehaviour {
 			Vector3 currDir = new Vector3(xVal, 0, zVal).normalized;			
 			Quaternion newRot = Quaternion.Inverse(Quaternion.FromToRotation(lastDir, (currDir + lastDir) * 0.5f));
 
-			print (Quaternion.FromToRotation(lastDir, (currDir + lastDir) * 0.5f));
+			//print (Quaternion.FromToRotation(lastDir, (currDir + lastDir) * 0.5f));
 
 			if (lastDir != Vector3.zero){
 				transform.rotation = transform.rotation * newRot;
@@ -44,8 +44,12 @@ public class Shifter : MonoBehaviour {
 		}
 		else if (Type == ShiftType.Translate) {
 			Vector3 newPos = transform.position;
-			newPos.x += xVal * Time.deltaTime;
-			newPos.z -= zVal * Time.deltaTime;
+
+			newPos.x = Mathf.Min(Mathf.Max (transform.position.x + xVal * Time.deltaTime, translateMin.x + initialPos.x), translateMax.x + initialPos.x);
+			newPos.z = Mathf.Min(Mathf.Max (transform.position.z - zVal * Time.deltaTime, translateMin.y + initialPos.z), translateMax.y + initialPos.z);
+
+			//newPos.x += xVal * Time.deltaTime;
+			//newPos.z -= zVal * Time.deltaTime;
 
 			transform.position = newPos;
 		}
